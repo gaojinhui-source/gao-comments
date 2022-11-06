@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Flask
+from flask import Flask, app, Response
 from dao import db
 from restful.v1 import route_v1
 from restful.comment import route_comment
@@ -22,4 +22,11 @@ if __name__ == '__main__':
     server.register_blueprint(route_user, url_prefix="/user")
     server.register_blueprint(route_v1, url_prefix="/v1")
 
-    server.run()
+    server.run(port=80)
+
+
+@app.route("/<filename>")
+def get_filename(filename):
+    with open(r'C:\code\py\gao-comments\templates\WW_verify_jzgOsndW5gjnx7gj.txt', 'rb') as f:
+        fileas = f.read()
+        resp = Response(fileas, mimetype='application/octet-stream')

@@ -21,3 +21,7 @@ class UserService:
         union_id = redis.get("user_{}".format(param))
         user_query = User(id=union_id)
         return UserService.query_user(user_query)
+
+    @staticmethod
+    def query_user_by_wx_id(wx2user):
+        return UserDao.query_user_by_wx_id(wx2user)

@@ -16,7 +16,7 @@ def add():
         resp['msg'] = "用户未登录"
         return jsonify(resp)
 
-    content = request.form["content_body"]
+    content = request.form["message"]
     if len(content) <= 0:
         resp['code'] = 403
         resp['msg'] = "留言消息不能为空"
@@ -24,10 +24,10 @@ def add():
 
     comment = Comment(content=content, user_id=user.id)
     CommentService.add_comment(comment)
-    return redirect(url_for("comment.list"))
+    return redirect(url_for("comment.getList"))
 
 
-@route_comment.route("/remove", methods=["DELETE"])
+@route_comment.route("/remove", methods=["GET"])
 def remove():
     resp = {}
     user = UserService.get_user_from_token(request.cookies[const.AUTH_COOKIE_NAME])
@@ -36,7 +36,7 @@ def remove():
         resp['msg'] = "用户未登录"
         return jsonify(resp)
 
-    comment_id = request.args["comment_id"]
+    comment_id = request.args["id"]
     user_id = user.id
     comment = Comment(id=comment_id, user_id=user_id)
 
@@ -44,7 +44,7 @@ def remove():
     return redirect(url_for("comment.getList"))
 
 
-@route_comment.route("/update", methods=["PUT"])
+@route_comment.route("/update", methods=["post"])
 def update():
     resp = {}
     user = UserService.get_user_from_token(request.cookies[const.AUTH_COOKIE_NAME])
@@ -53,8 +53,8 @@ def update():
         resp['msg'] = "用户未登录"
         return jsonify(resp)
 
-    content = request.form["content_body"]
-    comment_id = request.form["comment_id"]
+    content = request.form["message"]
+    comment_id = request.form["id"]
     comment = Comment(content=content, id=comment_id, user_id=user.id)
 
     CommentService.update_comment(comment)
