@@ -1,9 +1,10 @@
-from flask import Flask
+import datetime
+
+from flask import Flask, session
 from dao import db
 from restful.v1 import route_v1
 from restful.comment import route_comment
 from restful.user import route_user
-from flask_email import SMTPMail
 
 import config
 
@@ -11,11 +12,10 @@ if __name__ == '__main__':
     server = Flask(__name__)
     server.config.from_object(config)
     server.secret_key = "understaffed"
+    server.permanent_session_lifetime = datetime.timedelta(seconds=10 * 60)
+
     # 初始化dao
     db.init_app(server)
-
-    # 初始化邮箱
-    mail = SMTPMail(server)
 
     # 注册蓝图
     server.register_blueprint(route_comment, url_prefix="/comment")

@@ -1,10 +1,7 @@
 import random
 import string
-from io import BytesIO
-
 from captcha.image import ImageCaptcha
-from flask import Response, session, request, jsonify
-
+from flask import Response, session, request, jsonify, make_response
 from dao import redis
 from restful import route_v1
 from util.utils import send_message
@@ -16,14 +13,13 @@ def get_captcha():
     captcha = ImageCaptcha(width=120, height=50)  # 生成图片
     img = captcha.generate(img_code)
     session['imageCode'] = img_code.lower()
-    print(session['imageCode'].lower())
-    return Response(img)
+    print(session['imageCode'])
+    return R(img)
 
 
 @route_v1.route("/verification-code", methods=["GET"])
 def get_mobile_captcha():
     resp = {}
-    print(request.values)
     mobile = request.values.get("mobile")
     captcha_code = request.values.get("captcha")
     print(session['imageCode'].lower())

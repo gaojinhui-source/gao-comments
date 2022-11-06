@@ -2,6 +2,9 @@ import json
 import re
 from flask import jsonify
 from ronglian_sms_sdk import SmsSDK
+from smtplib import SMTP_SSL
+from email.mime.text import MIMEText
+from email.header import Header
 
 
 class Util:
@@ -68,7 +71,19 @@ def send_message(sms_code, mobile, expire=5):
     resd = json.loads(res)
     return res
 
-def send_mail():
-    msg = Message(theme, sender='1308454615@qq.com', recipients=[username],body=content)        #使用Messgae方法
-    mail.send(msg)              #使用Mail类中的send()方法
-    return '邮件发送成功'
+
+def send_email(self, receiver):
+    """发送邮件"""
+    sender = 'g23230014@163.com'  # 邮箱账号和发件者签名
+    # 定义发送邮件的内容，支持HTML和CSS样式
+    content = f"这是一个测试邮件，您无需关注"
+    message = MIMEText(content, 'html', 'utf-8')  # 实例化邮件对象，并指定邮件的关键信息
+    # 指定邮件的标题，同样使用utf-8编码
+    message['Subject'] = Header('测试邮件')
+    message['From'] = sender
+    message['To'] = receiver
+    smtpObj = SMTP_SSL('smtp.qq.com')  # QQ邮件服务器的链接
+    smtpObj.login(user='g23230014@163.com', password='NGPHVLNSRDICQRYN')  # 通过自己的邮箱账号和获取到的授权码登录QQ邮箱
+    # 指定发件人、收件人和邮件内容
+    smtpObj.sendmail(sender, receiver, str(message))
+    smtpObj.quit()

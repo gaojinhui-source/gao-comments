@@ -35,7 +35,7 @@ def register():
         resp['msg'] = "您的电话号码格式有误，请重新设置"
         return jsonify(resp)
 
-    sex = request.form["sex"]
+    sex = int(request.form["sex"])
     if sex != 1 and sex != 0:
         resp['code'] = 403
         resp['msg'] = "您的性别设置有误，请重新设置"
@@ -79,6 +79,7 @@ def login():
     redis.set("user_{}".format(user_result.id), user_result.id)
     # 登录成功后删除短信验证码
     redis.delete(sms_key)
+    return response
 
 
 @route_user.route("/logout", methods=["GET"])
