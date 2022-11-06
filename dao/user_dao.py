@@ -14,14 +14,13 @@ class UserDao:
 
     @staticmethod
     def query_user(user):
-        print("query user : {}".format(user))
         record = (
             db.session.query(User)
             .filter(
-                or_(User.phone == user.phone, user.phone == None),
-                or_(User.id == user.id, user.id == None),
+                or_(User.phone == user.phone, user.phone is None),
+                or_(User.id == user.id, user.id is None),
             )
             .first()
         )
-        print("query result : {}".format(record))
+        print(record)
         return record

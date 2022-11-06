@@ -72,7 +72,7 @@ def login():
         resp['msg'] = "用户不存在，请重新输入"
         return jsonify(resp)
 
-    response = make_response(redirect(url_for("comment.list")))
+    response = make_response(redirect(url_for("comment.getList")))
     response.set_cookie(
         const.AUTH_COOKIE_NAME, "{}".format(user_result.id), 60 * 60 * 24
     )  # cookie保存1天
@@ -84,6 +84,6 @@ def login():
 
 @route_user.route("/logout", methods=["GET"])
 def user_logout():
-    response = make_response(redirect(url_for("user.user_login")))
+    response = make_response(redirect(url_for("user.login")))
     response.delete_cookie(const.AUTH_COOKIE_NAME)
     return response

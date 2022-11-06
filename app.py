@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Flask, session
+from flask import Flask
 from dao import db
 from restful.v1 import route_v1
 from restful.comment import route_comment
@@ -12,7 +12,7 @@ if __name__ == '__main__':
     server = Flask(__name__)
     server.config.from_object(config)
     server.secret_key = "understaffed"
-    server.permanent_session_lifetime = datetime.timedelta(seconds=10 * 60)
+    server.permanent_session_lifetime = datetime.timedelta(days=7)
 
     # 初始化dao
     db.init_app(server)

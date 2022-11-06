@@ -13,6 +13,6 @@ class User(db.Model):
     update_time = db.Column("mtime", db.DateTime, nullable=False, server_default=db.text("0000-00-00 00:00:00"))
 
     def __repr__(self):
-        return "user  id:{}, name:{}, phone:{}, email:{}, sex:{}, comments[{}]".format(
-            self.id, self.name, self.phone, self.email, self.sex, self.comments
+        return "user  id:{}, name:{}, phone:{}, email:{}, sex:{}".format(
+            self.id, self.name, self.phone, self.email, self.sex
         )

@@ -1,7 +1,7 @@
 import random
 import string
 from captcha.image import ImageCaptcha
-from flask import Response, session, request, jsonify, make_response
+from flask import Response, session, request, jsonify
 from dao import redis
 from restful import route_v1
 from util.utils import send_message
@@ -14,15 +14,17 @@ def get_captcha():
     img = captcha.generate(img_code)
     session['imageCode'] = img_code.lower()
     print(session['imageCode'])
-    return R(img)
+    return Response(img)
 
 
-@route_v1.route("/verification-code", methods=["GET"])
+@route_v1.route("/verification-code", methods=["POST"])
 def get_mobile_captcha():
     resp = {}
-    mobile = request.values.get("mobile")
-    captcha_code = request.values.get("captcha")
-    print(session['imageCode'].lower())
+    param = {}
+    data = request.data
+    jsonify()
+    mobile = request.form["mobile"]
+    captcha_code = request.form["captcha"]
     if captcha_code.lower() != session['imageCode'].lower():
         resp['code'] = 403
         resp['msg'] = "图形验证码不正确，请重新输入"

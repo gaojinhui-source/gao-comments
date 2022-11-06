@@ -68,11 +68,11 @@ def send_message(sms_code, mobile, expire=5):
     datas = ("%s" % sms_code, "%s" % expire)
 
     res = sms_sdk.sendMessage(tid=tid, mobile=mobile, datas=datas)
-    resd = json.loads(res)
+    json.loads(res)
     return res
 
 
-def send_email(self, receiver):
+def send_email(receiver):
     """发送邮件"""
     sender = 'g23230014@163.com'  # 邮箱账号和发件者签名
     # 定义发送邮件的内容，支持HTML和CSS样式
@@ -82,7 +82,7 @@ def send_email(self, receiver):
     message['Subject'] = Header('测试邮件')
     message['From'] = sender
     message['To'] = receiver
-    smtpObj = SMTP_SSL('smtp.qq.com')  # QQ邮件服务器的链接
+    smtpObj = SMTP_SSL('smtp.163.com')  # QQ邮件服务器的链接
     smtpObj.login(user='g23230014@163.com', password='NGPHVLNSRDICQRYN')  # 通过自己的邮箱账号和获取到的授权码登录QQ邮箱
     # 指定发件人、收件人和邮件内容
     smtpObj.sendmail(sender, receiver, str(message))

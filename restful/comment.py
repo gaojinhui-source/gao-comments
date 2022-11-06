@@ -41,7 +41,7 @@ def remove():
     comment = Comment(id=comment_id, user_id=user_id)
 
     CommentService.remove_comment(comment)
-    return redirect(url_for("comment.list"))
+    return redirect(url_for("comment.getList"))
 
 
 @route_comment.route("/update", methods=["PUT"])
@@ -58,7 +58,7 @@ def update():
     comment = Comment(content=content, id=comment_id, user_id=user.id)
 
     CommentService.update_comment(comment)
-    return redirect(url_for("comment.list"))
+    return redirect(url_for("comment.getList"))
 
 
 @route_comment.route("/list/", methods=["GET"])
@@ -71,6 +71,6 @@ def getList():
         resp['msg'] = "用户未登录"
         return jsonify(resp)
 
-    # 拿到所有的评论
+    # TODO 分页，但是前端貌似暂不支持
     messages_list = CommentService.list_comments(user.id)
     return render_template("pages/messages.html", messages=messages_list, user=user)
