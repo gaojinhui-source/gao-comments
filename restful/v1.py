@@ -7,7 +7,7 @@ from models.user import UserWXMap
 from restful import route_v1
 from service.user import UserService
 from util import const
-from util.const import WECHAT_ACCESS_TOKEN
+from util.const import WECHAT_LOGIN_SECRET
 from util.utils import send_message
 from flask_restful.reqparse import RequestParser
 import requests
@@ -49,19 +49,25 @@ def get_mobile_captcha():
 def get_wechat_login():
     qcode = request.args.get("code")
     corp_id = request.args.get("appid")
-    url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=" + corp_id + "&corpsecret=" + WECHAT_ACCESS_TOKEN
+    url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=" + corp_id + "&corpsecret=" + WECHAT_LOGIN_SECRET
     r = requests.get(url)
     m = r.json()
     token = m["access_token"]
     u = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token="+token+"&code="+qcode+"&debug=1"
     r = requests.get(u)
-    m1 = r.json()
-    uid = m1["userid"]
-    u = UserService.query_user_by_wx_id(UserWXMap(wx_id=uid))
-    response = make_response(redirect(url_for("comment.getList")))
-    response.set_cookie(
-        const.AUTH_COOKIE_NAME, "{}".format(u.id), 60 * 60 * 24
-    )  # cookie保存1天
-    redis.set("user_{}".format(u.id), u.id)
-    return response
+    # 企业微信扫码登录需配置可信域名，否则无法获取到用户信息
+    # m1 = r.json()
+    # uid = m1["userid"]
+    # u = UserService.query_user_by_wx_id(UserWXMap(wx_id=uid))
+    # if u is None:
+    #     resp['code'] = 403
+    #     resp['msg'] = "您的企业微信尚未注册，请先注册"
+    #     return jsonify(resp)
+    # response = make_response(redirect(url_for("comment.getList")))
+    # response.set_cookie(
+    #     const.AUTH_COOKIE_NAME, "{}".format(u.id), 60 * 60 * 24
+    # )  # cookie保存1天
+    # redis.set("user_{}".format(u.id), u.id)
+    # return response
+    return r.text
 

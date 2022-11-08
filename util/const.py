@@ -2,4 +2,4 @@
 AUTH_COOKIE_NAME = "comment_token"
 
 
-WECHAT_ACCESS_TOKEN = "mNonFOydufp0Y_Bv_5VidHp0z9zBA_bc7ow6KCo6UuY"
+WECHAT_LOGIN_SECRET = "mNonFOydufp0Y_Bv_5VidHp0z9zBA_bc7ow6KCo6UuY"
